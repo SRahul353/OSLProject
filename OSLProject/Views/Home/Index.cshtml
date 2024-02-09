@@ -1,4 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using OSLProject.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+ 
+@{
+
     ViewData["Title"] = "Home Page";
 }
 
@@ -16,8 +22,19 @@
                 </h2>
                 <div data-aos="fade-up" data-aos-delay="600">
                     <div class="text-center text-lg-start">
-                        <a class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center" asp-area="Identity" asp-page="/Account/Login">Click Here to Login</a>
-                            <i class="bi bi-arrow-right"></i>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                         
+                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+                            <a class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center" asp-area="" asp-controller="QA" asp-action="Index">Click Here to Create New Post</a>
+                        }
+                        else
+                        {
+
+                            <a class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center" asp-area="Identity" asp-page="/Account/Login">Click Here to Login</a>
+
+                        }
+                         <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
                 </div>
