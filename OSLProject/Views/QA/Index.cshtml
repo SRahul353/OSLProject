@@ -1,9 +1,21 @@
 ﻿@model IEnumerable<OSLProject.Models.QAModel>
+@using Microsoft.AspNetCore.Identity
+@using OSLProject.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+    @{
+        var user = await UserManager.GetUserAsync(User);
+    }
+
 
 <div class="container">
+    
     <h2>Questions And answers</h2>
     @if (User.IsInRole("Student"))
     {
+        <h4>Hello, @($"{user.FirstName} {user.LastName}") as you are a Student you can Create New Questions only. </h4>
         <a asp-action="Create" class="btn btn-primary">Create New Question</a>
     }
 
@@ -15,7 +27,7 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                    <p class="card-text"><small class="text-muted">Questions asked by @Html.DisplayFor(modelItem => item.User) on @Html.DisplayFor(modelItem => item.CreatedAt)</small></p>
+                    <p class="card-text"><small class="text-muted">Asked by: <b> @Html.DisplayFor(modelItem => item.User) on @Html.DisplayFor(modelItem => item.CreatedAt) </b></small></p>
                 </div>
                 <div class="card-body">
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Content)</p>
@@ -29,7 +41,7 @@
                             var reply = item.Replies.ElementAt(j);
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    <p class="card-text"><small class="text-muted">Reply by @reply.User on @reply.CreatedAt</small></p>
+                                    <p class="card-text"><small class="text-muted">Reply by: <strong> @reply.User on @reply.CreatedAt </strong></small></p>
                                 </div>
                                 <div class="card-body">
                                     <p class="card-text">@reply.Content</p>
@@ -39,6 +51,7 @@
                     </div>
                     @if (User.IsInRole("Teacher"))
                     {
+                        <h4>Hello, @($"{user.FirstName} {user.LastName}") as you are a Teacher you can Reply Questions only. </h4>
                         <form asp-controller="Reply" asp-action="Create" method="post">
                             <div class="form-group">
                             <label for="replyContent">Your Reply:</label>
@@ -60,3 +73,4 @@
         <p>No Questions found.</p>
     }
 </div>
+
