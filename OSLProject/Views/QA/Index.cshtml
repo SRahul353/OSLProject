@@ -2,7 +2,10 @@
 
 <div class="container">
     <h2>Questions And answers</h2>
-    <a asp-action="Create" class="btn btn-primary">Create New Question</a>
+    @if (User.IsInRole("Student"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Create New Question</a>
+    }
 
     @if (Model.Any())
     {
@@ -34,14 +37,17 @@
                             </div>
                         }
                     </div>
-                    <form asp-controller="Reply" asp-action="Create" method="post">
-                        <div class="form-group">
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        <form asp-controller="Reply" asp-action="Create" method="post">
+                            <div class="form-group">
                             <label for="replyContent">Your Reply:</label>
                             <textarea id="replyContent" name="replyContent" class="form-control" rows="3"></textarea>
                         </div>
                         <input type="hidden" name="questionId" value="@item.Id" />
                         <button type="submit" class="btn btn-primary">Reply</button>
                     </form>
+                    }
                 </div>
 
                 
