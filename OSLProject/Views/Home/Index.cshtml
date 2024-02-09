@@ -24,14 +24,14 @@
                     <div class="text-center text-lg-start">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                         
-                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-                            <a class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center" asp-area="" asp-controller="QA" asp-action="Index">Click Here to Create New Post</a>
+                            var user = await UserManager.GetUserAsync(User);
+                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @($"{user.FirstName} {user.LastName}")!</a>
+                            <a class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center" asp-area="" asp-controller="QA" asp-action="Index">Q&A Section</a>
                         }
                         else
                         {
 
-                            <a class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center" asp-area="Identity" asp-page="/Account/Login">Click Here to Login</a>
+                            <a class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center" asp-area="" asp-controller="QA" asp-action="Index">Get Started</a>
 
                         }
                          <i class="bi bi-arrow-right"></i>

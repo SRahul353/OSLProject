@@ -12,6 +12,7 @@ namespace OSLProject.Data
         }
 
         public DbSet<QAModel> QAModels { get; set; }
+        public DbSet<ReplyModel> ReplyModels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

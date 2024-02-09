@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using OSLProject.Data;
 using OSLProject.Models;
@@ -21,9 +22,11 @@ namespace OSLProject.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            var posts = _context.QAModels.ToList();
+
+            var posts = await _context.QAModels.Include(q => q.Replies).ToListAsync();
+
             return View(posts);
         }
 
@@ -33,6 +36,7 @@ namespace OSLProject.Controllers
             return View();
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(QAModel QA)
@@ -41,20 +45,18 @@ namespace OSLProject.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user != null)
                 {
-                    
                     QA.User = user.UserName;
                     QA.CreatedAt = DateTime.Now;
-
                     _context.QAModels.Add(QA);
-                    _context.SaveChanges(); 
+                    await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "QA");
                 }
                 else
                 {
                     return RedirectToAction("Login", "Account");
                 }
-
+            
             return View(QA);
         }
     }

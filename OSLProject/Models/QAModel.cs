@@ -13,5 +13,7 @@
 
             public string User { get; set; }
 
+            public List<ReplyModel> Replies { get; set; }
+
     }
 }
